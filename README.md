@@ -14,8 +14,8 @@ The website uses relative asset paths, so it works beneath the `/evnoi/` project
 
 ## What is interactive
 
-- Audience story cards auto-advance while visible; they pause on hover, focus, touch, hidden tabs and reduced-motion settings. Native touch scrolling and arrow controls remain available.
-- Scroll-controlled 3D journal preview: choose the 30-Day Reset or Little Beginnings, then move down the page to open the cover and advance through three spreads. Scrolling back reverses it.
+- On desktop all three audience cards fit in one row, with an automatically advancing spotlight. On compact screens they auto-slide one full card at a time. Arrow controls are available; motion pauses briefly after touch/focus and is disabled for reduced-motion preferences.
+- Scroll-controlled 3D journal preview: choose the 30-Day Reset or Little Beginnings, then move down the page to open the cover and advance through three spreads. An upright cover panel stays visible while the pages turn; scrolling back reverses the effect without a large empty scroll runway.
 - Three selectable corporate collaboration bundles
 - Product search and filters, detail dialogs, favorites, responsive navigation and a demo bag
 

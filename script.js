@@ -7,23 +7,28 @@ const products = [
 ];
 const state={filter:'all',query:'',bag:{},favorites:new Set(),slide:0,book:'reset',bookOpen:false,page:0};
 const rupees=n=>'₹'+n.toLocaleString('en-IN');
-const rail=$('#storyRail');
+const rail=$('#storyRail'),storyWindow=$('.story-window');
 const storyCards=[...rail.querySelectorAll('.story-card')];
 let storyIndex=0,storyVisible=false,storyPausedUntil=0;
 const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+const compactStories=window.matchMedia('(max-width: 900px)');
 function goToStory(index,manual=false){
-  storyIndex=(index+storyCards.length)%storyCards.length;
+ storyIndex=(index+storyCards.length)%storyCards.length;
+ storyCards.forEach((card,i)=>card.classList.toggle('active-story',i===storyIndex));
+ if(compactStories.matches){
   const step=storyCards[0].getBoundingClientRect().width+18;
-  rail.scrollTo({left:step*storyIndex,behavior:reduceMotion.matches?'instant':'smooth'});
-  $('#storyPosition').textContent=String(storyIndex+1).padStart(2,'0')+' / 03';
-  if(manual)storyPausedUntil=Date.now()+8000;
+  rail.style.transform=`translate3d(-${step*storyIndex}px,0,0)`;
+ }else rail.style.transform='translate3d(0,0,0)';
+ $('#storyPosition').textContent=String(storyIndex+1).padStart(2,'0')+' / 03';
+ if(manual)storyPausedUntil=Date.now()+5000;
 }
 $('#storyPrev').addEventListener('click',()=>goToStory(storyIndex-1,true));
 $('#storyNext').addEventListener('click',()=>goToStory(storyIndex+1,true));
-rail.addEventListener('pointerdown',()=>{storyPausedUntil=Date.now()+9000},{passive:true});
-rail.addEventListener('focusin',()=>{storyPausedUntil=Date.now()+9000});
-if('IntersectionObserver' in window){new IntersectionObserver(entries=>{storyVisible=entries[0].isIntersecting},{threshold:.35}).observe(rail)}else storyVisible=true;
-setInterval(()=>{if(storyVisible&&!reduceMotion.matches&&!document.hidden&&Date.now()>storyPausedUntil&&!rail.matches(':hover')&&!document.body.classList.contains('locked'))goToStory(storyIndex+1)},4400);
+storyWindow.addEventListener('pointerdown',()=>{storyPausedUntil=Date.now()+6500},{passive:true});
+storyWindow.addEventListener('focusin',()=>{storyPausedUntil=Date.now()+6500});
+window.addEventListener('resize',()=>goToStory(storyIndex));
+if('IntersectionObserver' in window){new IntersectionObserver(entries=>{storyVisible=entries[0].isIntersecting},{threshold:.25}).observe(storyWindow)}else storyVisible=true;
+setInterval(()=>{if(storyVisible&&!reduceMotion.matches&&!document.hidden&&Date.now()>storyPausedUntil&&!document.body.classList.contains('locked'))goToStory(storyIndex+1)},3600);
 function renderProducts(){const matched=products.filter(p=>(state.filter==='all'||p.kind.includes(state.filter))&&(p.title+' '+p.category+' '+p.short).toLowerCase().includes(state.query.toLowerCase()));$('#productGrid').innerHTML=matched.map(p=>`<article class="product-card"><div class="product-image-wrap" data-open="${p.id}" role="button" tabindex="0" aria-label="View ${p.title}"><img src="${p.image}" alt="Illustrative ${p.title} product concept" loading="lazy"><span class="product-badge">${p.badge}</span><button class="heart-btn ${state.favorites.has(p.id)?'liked':''}" data-favorite="${p.id}" aria-label="${state.favorites.has(p.id)?'Remove '+p.title+' from':'Save '+p.title+' to'} favorites" aria-pressed="${state.favorites.has(p.id)}"><svg><use href="#heart"/></svg></button><button class="product-quick" data-open="${p.id}">Explore this piece</button></div><div class="product-info"><span class="product-category">${p.category}</span><div class="product-title-line"><h3>${p.title}</h3><span>${rupees(p.price)}*</span></div><p>${p.short}</p><button class="card-action" data-${p.interest?'interest':'add'}="${p.id}">${p.interest?'Explore concept':'Add to demo bag'} ↗</button></div></article>`).join('');$('#emptyState').hidden=matched.length!==0}
 function toast(s){let el=$('#toast');el.textContent=s;el.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('show'),3000)}
 function closeOverlays(){['#bagDrawer','#productModal','#interestModal'].forEach(s=>$(s).hidden=true);$('#scrim').hidden=true;document.body.classList.remove('locked')}
@@ -38,7 +43,7 @@ const bookData={
 function renderPage(){const info=bookData[state.book],page=info.pages[state.page];$('#pageContent').innerHTML=`<span class="page-head">${state.book==='reset'?'THE 30-DAY RESET':'LITTLE BEGINNINGS'} / 0${state.page+1}</span><span class="page-doodle">${state.book==='reset'?'✳':'☾'}</span><h4>${page.title}</h4><p>${page.intro}</p>${(page.lines||[]).map(x=>`<div class="write-line">${x}</div>`).join('')}${(page.checks||[]).map(x=>`<div class="check-label"><span class="check-box"></span>${x}</div>`).join('')}<span class="tiny-date">EVNOI ✳ &nbsp; 0${state.page+1}</span>`}
 function setBook(which){
  state.book=which;state.page=0;state.bookOpen=false;$('#book').classList.remove('open');
- $('#coverImage').src=bookData[which].cover;$('#coverImage').alt=bookData[which].alt;
+ $('#coverImage').src=bookData[which].cover;$('#coverImage').alt=bookData[which].alt;$('#openCoverImage').src=bookData[which].cover;
  $('#bookLabel').textContent=bookData[which].label;$('#bookCaption').textContent=bookData[which].caption;
  $('#bookDescription').textContent=bookData[which].description;
  document.querySelectorAll('.flip-tab').forEach(b=>{let active=b.dataset.book===which;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});
@@ -68,5 +73,5 @@ document.querySelectorAll('.filter').forEach(b=>b.addEventListener('click',()=>{
 $('#bagToggle').addEventListener('click',()=>openOverlay('#bagDrawer'));$('#bagClose').addEventListener('click',closeOverlays);$('#modalClose').addEventListener('click',closeOverlays);$('#interestClose').addEventListener('click',closeOverlays);$('#interestBreakfast').addEventListener('click',()=>openOverlay('#interestModal'));$('#scrim').addEventListener('click',closeOverlays);document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeOverlays();$('#searchPanel').hidden=true;$('#mobileNav').hidden=true;$('#menuToggle').setAttribute('aria-expanded','false')}});
 $('#searchToggle').addEventListener('click',()=>{$('#searchPanel').hidden=!$('#searchPanel').hidden;if(!$('#searchPanel').hidden)$('#searchInput').focus()});$('#searchClose').addEventListener('click',()=>{$('#searchPanel').hidden=true;$('#searchInput').value='';state.query='';renderProducts()});$('#searchInput').addEventListener('input',e=>{state.query=e.target.value;renderProducts();if(state.query)$('#shop').scrollIntoView({behavior:'smooth'})});$('#menuToggle').addEventListener('click',()=>{let n=$('#mobileNav');n.hidden=!n.hidden;$('#menuToggle').setAttribute('aria-expanded',String(!n.hidden))});$('#mobileNav').addEventListener('click',e=>{if(e.target.closest('a')){$('#mobileNav').hidden=true;$('#menuToggle').setAttribute('aria-expanded','false')}});
 $('#newsletterForm').addEventListener('submit',e=>{e.preventDefault();$('#newsletterMessage').textContent='Preview only—no email was sent or saved. Connect a mailing-list service to enable sign-ups.';$('#newsletterMessage').style.color='#734338';$('#newsletterForm').reset();toast('This concept form is not connected yet')});
-renderProducts();renderBag();setBook('reset');
+renderProducts();renderBag();setBook('reset');goToStory(0);
 if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.08,rootMargin:'0px 0px 40px 0px'});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el))}else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
