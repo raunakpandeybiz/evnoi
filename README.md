@@ -8,7 +8,9 @@ From this directory, run `python3 -m http.server 8080` and open `http://localhos
 
 ## GitHub Pages publishing
 
-The workflow at `.github/workflows/pages.yml` publishes this static site whenever `main` changes. The repository owner must first enable Pages in **Settings → Pages → Build and deployment → Source: GitHub Actions**. If the workflow ran before Pages was enabled, use **Actions → Publish EVNOI concept site → Run workflow** to run it again. The expected URL for this repository is `https://raunakpandeybiz.github.io/evnoi/`; do not treat it as live until the deployment succeeds.
+This repository includes a `gh-pages` branch containing the static site. To make it public, the repository owner must open **Settings → Pages → Build and deployment**, choose **Deploy from a branch**, select **gh-pages** and **/(root)**, then save. GitHub should publish to `https://raunakpandeybiz.github.io/evnoi/` once the deployment completes. Do not consider that URL live until it returns the website rather than a 404 page.
+
+The website uses relative asset paths, so it works beneath the `/evnoi/` project path.
 
 ## What is interactive
 
