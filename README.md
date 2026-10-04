@@ -1,18 +1,21 @@
 # EVNOI — concept storefront
 
-An independent EquiNova case-study website for EVNOI with one consistent brand hero and three scrollable audience stories: clear thinking, new parents, and breakfast planning.
+An independent EquiNova case-study website for EVNOI with one consistent brand hero and three audience stories: clear thinking, new parents and breakfast planning.
 
-## Preview
+## Preview locally
 
 From this directory, run `python3 -m http.server 8080` and open `http://localhost:8080`.
 
+## GitHub Pages publishing
+
+The workflow at `.github/workflows/pages.yml` publishes this static site whenever `main` changes. The repository owner must first enable Pages in **Settings → Pages → Build and deployment → Source: GitHub Actions**. If the workflow ran before Pages was enabled, use **Actions → Publish EVNOI concept site → Run workflow** to run it again. The expected URL for this repository is `https://raunakpandeybiz.github.io/evnoi/`; do not treat it as live until the deployment succeeds.
+
 ## What is interactive
 
-- Scrollable story cards with previous/next arrows, native touch scrolling and scroll snapping
-- 3D open/close journal: choose between the 30-Day Reset and Little Beginnings and turn through three sample pages
-- Selectable corporate collaboration bundles
-- Product search and category filters, detail dialogs, favorites, responsive navigation and a demo bag with quantity controls
-- Motion on scroll and hover, with reduced-motion accessibility support
+- Audience story cards auto-advance while visible; they pause on hover, focus, touch, hidden tabs and reduced-motion settings. Native touch scrolling and arrow controls remain available.
+- Scroll-controlled 3D journal preview: choose the 30-Day Reset or Little Beginnings, then move down the page to open the cover and advance through three spreads. Scrolling back reverses it.
+- Three selectable corporate collaboration bundles
+- Product search and filters, detail dialogs, favorites, responsive navigation and a demo bag
 
 ## Product concept
 

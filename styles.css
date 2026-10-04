@@ -66,3 +66,23 @@
 @media(max-width:1180px){.story-card{flex-basis: min(49vw,520px);min-width:380px}.hero-visual-static img{object-position:54% center}}
 @media(max-width:860px){.hero-visual-static{height:470px}.story-section{padding-top:82px;padding-bottom:76px}.story-card{flex-basis:65vw;min-width:355px}.story-photo{height:290px}}
 @media(max-width:580px){.hero-visual-static{height:380px}.hero-visual-caption{left:10px;right:10px;bottom:10px;padding:10px 11px;font-size:7px;line-height:1.4}.hero-visual-caption span:first-child{max-width:190px}.hero-visual-static img{object-position:56% center}.story-section{padding-top:71px;padding-bottom:67px}.story-section-top{align-items:end}.story-section-top h2{font-size:44px}.story-section-top p{font-size:11px}.story-arrows button{width:36px;height:36px}.story-arrows{gap:4px}.story-card{flex-basis:87vw;min-width:0}.story-photo{height:250px}.story-text{min-height:290px;padding:21px 19px 23px}.story-text h3{font-size:39px}.story-text p{font-size:12px}.story-detail{font-size:8px}.story-scroll-hint{font-size:8px}}
+/* Auto-advancing story rail: hide the mouse-wheel-looking track, keep touch and arrow access. */
+.story-rail{scrollbar-width:none;-ms-overflow-style:none;scroll-padding-inline:0}
+.story-rail::-webkit-scrollbar{display:none}
+.story-rail:after{content:"";flex:0 0 max(0px,calc(100% - min(41vw,555px) - 18px))}
+.story-scroll-hint{display:flex;align-items:center;justify-content:flex-end;gap:7px}
+.story-scroll-hint #storyPosition{font-size:11px;color:#315344}
+/* The page-turn demonstration is controlled by vertical document scroll, not buttons. */
+.flip-section{min-height:1770px;position:relative}
+.book-zone{position:sticky;top:75px}
+.scroll-flip-cue{min-width:188px;text-align:right;align-self:center}
+.scroll-flip-cue>span{display:block;font-size:9px;font-weight:800;letter-spacing:.13em;color:#6f8374}
+.scroll-flip-track{height:3px;background:#d7ded2;margin:13px 0 8px;overflow:hidden}
+.scroll-flip-track>span{display:block;width:0;height:100%;background:#c77962;transition:width .14s linear}
+.scroll-flip-cue>strong{font-size:12px;letter-spacing:.13em;color:#294b3d}
+.cover-face,.cover-inside{-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.book.open .cover-face{opacity:0;transition:opacity .01s linear .55s}
+.book:not(.open) .cover-face{opacity:1;transition:opacity .01s linear .48s}
+@media(max-width:1180px){.story-rail:after{flex-basis:max(0px,calc(100% - min(49vw,520px) - 18px))}}
+@media(max-width:860px){.story-rail:after{flex-basis:max(0px,calc(100% - 65vw - 18px))}.flip-section{min-height:1600px}.book-zone{top:68px}}
+@media(max-width:580px){.story-rail:after{flex-basis:max(0px,calc(100% - 87vw - 18px))}.flip-section{min-height:1500px}.book-zone{top:65px}.scroll-flip-cue{text-align:left;margin-top:12px}.book-caption{display:flex;align-items:flex-end}.book-caption>div:first-child{max-width:67%}.scroll-flip-cue{min-width:85px}.scroll-flip-cue>span{font-size:7px}.scroll-flip-cue>strong{font-size:10px}}
